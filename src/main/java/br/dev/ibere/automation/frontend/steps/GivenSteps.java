@@ -16,10 +16,12 @@ public class GivenSteps extends SeleniumSteps {
     @Given("I open SwagLabs login page")
     public void openLoginPage() {
         loginPage.openLoginPage();
+        log.info("SwagLabs Login page open.");
     }
 
     @Given("I login with user {string}")
     public void loginWithUser(String username) {
+        log.info("Will try to login with user '{}'...", username);
         loginPage.openLoginPage();
         loginPage.setUsername(username);
         loginPage.setPassword(loginPage.getCommonPassword());

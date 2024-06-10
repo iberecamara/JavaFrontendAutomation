@@ -9,8 +9,6 @@ import org.springframework.context.annotation.PropertySource;
         "classpath:configs/application.properties",
         "classpath:configs/urls.properties",
         "classpath:configs/urls-${env}.properties",
-
-        "classpath:locators/base.properties",
         "classpath:locators/login.properties",
         "classpath:locators/logged.properties",
 }, ignoreResourceNotFound = true)
