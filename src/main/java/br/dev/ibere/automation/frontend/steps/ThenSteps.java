@@ -26,12 +26,14 @@ public class ThenSteps extends SeleniumSteps {
     public void validateUsernameInList(String username) {
         List<String> acceptedUsernames = getFromContext("acceptedUsernames");
         assertThat(acceptedUsernames, hasItem(username));
+        log.info("Username '{}' was found in the 'Accepted usernames' list.", username);
     }
 
     @Then("I validate the common password value")
     public void validateCommonPassword() {
         String commonPassword = getFromContext("commonPassword");
         assertThat(commonPassword, equalToIgnoringCase("secret_sauce"));
+        log.info("Common password '{}' matches the expected 'secret_sauce'.", commonPassword);
     }
 
     @Then("Login is {string}")
@@ -40,6 +42,7 @@ public class ThenSteps extends SeleniumSteps {
         String message = shouldLogin ? "Login should be successful." : "Login shouldn't be successful.";
         assertThat(message,
                 loggedPage.isAppLogoDisplayed(), is(shouldLogin));
+        log.info("Login was {} as expected.", status);
     }
 
     @Then("I can see app logo text as Swag Labs")
@@ -47,6 +50,7 @@ public class ThenSteps extends SeleniumSteps {
         String appLogoText = loggedPage.getAppLogoText();
         assertThat("App logo text should match expected.",
                 appLogoText, equalToIgnoringCase("Swag Labs"));
+        log.info("App logo text '{}' matches the expected 'Swag Labs'.", appLogoText);
     }
 
     @Then("I can see {string} displayed as error message")
@@ -54,6 +58,7 @@ public class ThenSteps extends SeleniumSteps {
         String actualErrorMessage = loginPage.getErrorMessage();
         assertThat("Error message should match expected.",
                 actualErrorMessage, equalToIgnoringCase(errorMessage));
+        log.info("Error message '{}' was found as expected.", errorMessage);
     }
 
 }

@@ -23,21 +23,22 @@ public class ScreenshotHooks {
     @Autowired
     private WebDriver driver;
 
-    private final String screenshotFolder = String.format("%s/screenshots", System.getProperty("user.dir"));
+    private final String screenshotsFolder = String.format("%s/screenshots", System.getProperty("user.dir"));
 
 
-    @After
+    @After(order = 10)
     public void takeScreenshotOnFailure(Scenario scenario) {
         if (scenario.isFailed()) {
-            log.info("Scenario failed, taking screenshot...");
+            log.debug("Scenario failed, taking screenshot...");
             TakesScreenshot driver = (TakesScreenshot) this.driver;
             byte[] screenshot = driver.getScreenshotAs(OutputType.BYTES);
-            String fileName = String.format("%s/automation-selenium-screenshot-%s-%s.png",
-                    screenshotFolder,
+            String fileName = String.format("%s/automation-selenium-screenshot-%s-%s-%s.png",
+                    screenshotsFolder,
+                    scenario.getId(),
                     scenario.getName().replace(' ', '_'),
                     ZonedDateTime.now()
                             .format(DateTimeFormatter.ofPattern("dd-MM-yyyy-hh-mm-ssZ")));
-            log.info("Saving screenshot to: {}", fileName);
+            log.debug("Saving screenshot to: {}", fileName);
             createFolderIfNotPresent();
             scenario.attach(screenshot, "image/png", fileName);
             try (FileOutputStream fos = new FileOutputStream(fileName)) {
@@ -51,14 +52,14 @@ public class ScreenshotHooks {
     }
 
     private void createFolderIfNotPresent() {
-        File directory = new File(screenshotFolder);
+        File directory = new File(screenshotsFolder);
         if (!directory.exists()) {
-            log.info("Folder {} does not exist, creating it...", screenshotFolder);
+            log.debug("Folder {} does not exist, creating it...", screenshotsFolder);
             if (directory.mkdir()) {
-                log.info("{} folder created.", screenshotFolder);
+                log.debug("{} folder created.", screenshotsFolder);
             } else {
                 throw new AutomationException(
-                        String.format("Could not create screenshots folder at %s.", screenshotFolder));
+                        String.format("Could not create screenshots folder at %s.", screenshotsFolder));
             }
         }
     }
